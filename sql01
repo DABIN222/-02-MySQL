@@ -1,0 +1,123 @@
+-- select
+-- from
+-- where
+-- order by
+-- 순으로~
+
+-- 1. 사용할 파일 시작해주기
+use demo;
+
+-- 2. database와 table 확인하기
+show databases;
+show tables;
+
+-- 3. table의 목록에 있는 자료 확인하기
+select * from emp;
+select * from dept;
+select * from salgrade;
+
+desc emp;
+
+select empno, ename from emp;
+
+
+-- 4. 쿼리문 작성법
+-- select
+-- from
+-- where
+-- order by
+
+-- 5. 연산자 사용해보기
+
+	-- 5.1 IN, OUT IN 연산자
+		select empno, ename from emp where empno in(7369,7499);
+		select empno, ename from emp where empno not in(7369,7499);
+        
+	-- 5.2 BETWEEN 연산자 (<=,=>)
+		select empno, ename from emp where empno between 7700 and 7900;
+	
+    -- 5.3 LIKE 연산자
+	-- %: 여러개의 문자열을 나타냄
+    -- _: 단 하나의 문자를 나타냄
+    -- ESCAPE: 와일드 카드 문자를 일반 문자처럼 사용하고 싶은 경우
+		-- %
+        select * from emp where ename like 'A%';		-- 컬럼이 A로 시작하는 데이터
+        select * from emp where ename like '%D';		-- 컬럼이 D로 끝나는 데이터
+        select * from emp where ename like '%AR%';		-- 컬럼에 AR문자가 들어간 데이터
+        select * from emp where ename like '%A%K%';		-- 컬럼에 A와 K문자가 들어간 데이터
+        select * from emp where ename like '_A%';		-- 컬럼에 A문자가 두 번째에 위치한 데이터
+        
+        select empno, ename from emp where ename like '%K%';
+        select empno, ename from emp where ename like '_I%';
+        select empno, ename, hiredate from emp where hiredate like '_____12%';
+        
+	-- 5.4 ORDER BY(ASC[오름차순], DESC[내림차순])
+		select * from emp;
+        select empno, ename from emp where empno <= 7700 and ename like '%A%' order by empno asc;
+        select empno, ename from emp where empno <= 7700 and ename like '%A%' order by empno;
+        select empno, ename from emp where empno <= 7700 and ename like '%A%' order by empno desc;
+        
+        
+	-- 연습문제
+    
+    -- 4. emp테이블의 레코드중 사원명에 'A'가 들어가고 고용일이 1981~1982년 사이인 사원을 이름 오름차순으로 선택하라.
+        select * from emp
+        where ename like '%K%' and 
+			hiredate between '1981-01-01' and '1982-12-31'
+        order by ename asc;
+        
+
+        
+-- 6. 내장함수(1) [숫자함수]
+	-- ABS(n) : 절대값을 계산하는 함수
+		select abs(-10);
+        
+	-- CEIL(n), CEILING(n) : 올림
+		select ceil(10.1);		-- 11
+        select ceiling(10.1);	-- 11
+        select ceil(-10.1);		-- (-10)
+        
+	-- FLOOR(n) : 내림
+		select floor(10.1);		-- 10
+		select floor(-10.1);	-- (-11)
+        
+	-- MOD(m,n), %, MOD : 나머지
+		select mod(14,3);
+        select 14%3;
+        select 14 mod 3;
+        
+	-- RAND : 0~1 사이의 난수, ln함수는 자연로그 값을 변환
+		select rand(), floor(1 + (rand()*6));
+        select rand(), ceil(rand()*6);
+        
+	-- POW(m,n), SQRT(n) : 거듭제곱, 제곱근으로 m의 n승 값을 계산
+		select pow(2,4);
+        
+	-- ROUND(n, [m]) : n값의 반올림을 하는 함수로 m은 소숫점 아래 자리수
+		select round(123.456, 1);
+		select round(123.456, 2);
+		select round(163.456, -2);		-- y축 기준으로 왼쪽으로(-) 가서 반올림하니까 100임
+
+	-- TRUNCATE(n,m) : n값을 m 소숫점 자리로 반내림한 값 반환 (소수이하자리 버림)
+		select truncate(123.456, 2);
+        select truncate(163.456, -2);
+
+	-- SIGN(n) : 숫자가 양수이면 1, 음수이면 -1을 반환, 0은 0반환
+		select sign(3);
+        select sign(-3);
+        select sign(0);
+        
+	-- FORMAT(숫자, 소숫점 자리수) : 숫자를 소숫점 아래 자리수 까지만 표현, 그리고 1000단위마다 콤마 표시
+		select format(123.345 , 2);
+		select format(123456.1234 , 2);
+        
+	-- CONV(숫자, 기존진수, 변환진수) : 진수 변환할 때
+		select conv(20, 10, 2);
+        
+	-- BIN(), HEX(), OCT() : 2진수, 16진수, 8진수 값 구하기
+		select bin(31);		-- 11111
+		select hex(31);		-- 1F
+		select oct(31);		-- 37
+    
+    
+    
