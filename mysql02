@@ -1,0 +1,72 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class BookDAO {
+
+	public BookDAO() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	Connection con = null;
+	PreparedStatement pstmt = null;
+	
+	// book 테이블에 데이터를 저장
+	public void insertBook() {
+		// ( 도서번호, 도서 제목, 저자, 발행연도, 가격, 출판사 ) 레코드 추가하기
+		// 1. 드라이브로딩
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			
+			
+			// 2. DB연결
+			con = DriverManager.getConnection("jdbc:mysql://localhost/mydb","root","0000");
+		
+			// 3. PreparedStatement 객체 생성 : 쿼리문 이용
+			String sql = "insert into booktable(bookno, booktitle, bookauthor, bookyear, bookprice, bookpublisher) values (?, ?, ?, ?, ?, ?)";
+			
+			// preparded 객체 생성
+			pstmt = con.prepareStatement(sql);
+			
+			pstmt.setString(1, "B004");
+			pstmt.setString(2, "자바스크립트");
+			pstmt.setString(3, "강길동");
+			pstmt.setInt(4, 2020);
+			pstmt.setInt(5, 28000);
+			pstmt.setString(6, "서울출판사");
+		
+		
+			// 4. 실행
+			int cnt = pstmt.executeUpdate();
+			if(cnt > 0) {
+				System.out.println("레코드가 추가되었습니다.");
+			}else {
+				System.out.println("레코드 추가에 실패했습니다.");
+			}
+		
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			
+			try {
+				if(pstmt != null)	pstmt.close();
+				if(con != null)		con.close();
+			} catch(Exception e2) {e2.printStackTrace();}
+			
+		}
+		
+		
+	}
+	
+	
+	// book 테이블에 있는 모든 데이터 출력
+	public void selectBook() {}
+	
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		new BookDAO().insertBook();
+	}
+
+}
